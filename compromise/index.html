@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Alert - Lookout Demo</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #1E3239;
+            color: #FFFFFF;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Animated Background Pattern */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(200, 255, 0, 0.1) 35px, rgba(200, 255, 0, 0.1) 70px),
+                repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(200, 255, 0, 0.05) 35px, rgba(200, 255, 0, 0.05) 70px);
+            animation: patternMove 20s linear infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes patternMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        /* Floating Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 20s infinite ease-in-out;
+            pointer-events: none;
+        }
+        
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #C8FF00 0%, transparent 70%);
+            top: -10%;
+            right: -10%;
+            animation-delay: 0s;
+        }
+        
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #6A7EED 0%, transparent 70%);
+            bottom: -10%;
+            left: -10%;
+            animation-delay: -5s;
+        }
+        
+        .orb-3 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, #15E08C 0%, transparent 70%);
+            top: 50%;
+            left: 30%;
+            animation-delay: -10s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 24px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(30, 50, 57, 0.9) 0%, transparent 100%);
+            backdrop-filter: blur(10px);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 24px;
+            letter-spacing: -0.5px;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #C8FF00 0%, #15E08C 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 60%;
+            background: #1E3239;
+            clip-path: polygon(0 0, 100% 50%, 0 100%, 0 0);
+            transform: translateX(-10%);
+        }
+        
+        /* Main Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 140px 24px 80px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* Alert Badge */
+        .alert-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(247, 66, 45, 0.15);
+            border: 1px solid rgba(247, 66, 45, 0.3);
+            color: #F7422D;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 32px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .alert-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #F7422D;
+            border-radius: 50%;
+            animation: blink 1.5s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        /* Main Content */
+        h1 {
+            font-size: clamp(36px, 6vw, 64px);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -2px;
+            background: linear-gradient(135deg, #FFFFFF 0%, #B8F3D4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-size: 20px;
+            color: #97A0A4;
+            line-height: 1.6;
+            margin-bottom: 48px;
+            max-width: 600px;
+        }
+        
+        /* Visual Element */
+        .visual-container {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 48px;
+            margin-bottom: 48px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        
+        .visual-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #C8FF00, transparent);
+            animation: scan 3s linear infinite;
+        }
+        
+        @keyframes scan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .icon-large {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(200, 255, 0, 0.2) 0%, rgba(21, 224, 140, 0.2) 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            border: 1px solid rgba(200, 255, 0, 0.3);
+            position: relative;
+        }
+        
+        .icon-large::after {
+            content: '⚠';
+            font-size: 36px;
+            color: #C8FF00;
+        }
+        
+        .demo-text {
+            font-family: 'Courier New', monospace;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 3px solid #C8FF00;
+            color: #C8FF00;
+            font-size: 14px;
+            margin-top: 16px;
+        }
+        
+        /* CTA Button */
+        .cta-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: flex-start;
+        }
+        
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: #C8FF00;
+            color: #1E3239;
+            padding: 18px 36px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 2px solid #C8FF00;
+            box-shadow: 0 4px 20px rgba(200, 255, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+        
+        .cta-button:hover::before {
+            left: 100%;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(200, 255, 0, 0.4);
+        }
+        
+        .cta-secondary {
+            color: #97A0A4;
+            font-size: 14px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+        }
+        
+        .cta-secondary:hover {
+            color: #FFFFFF;
+        }
+        
+        /* Footer */
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding: 24px;
+            text-align: center;
+            color: #707D80;
+            font-size: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(30, 50, 57, 0.8);
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 16px 24px;
+            }
+            
+            .container {
+                padding: 120px 20px 100px;
+            }
+            
+            .visual-container {
+                padding: 32px 24px;
+            }
+        }
+        
+        /* Page Specific Variations */
+        .page-phishing .icon-large::after { content: '🎣'; }
+        .page-compromise .icon-large::after { content: '📱'; }
+        .page-credentials .icon-large::after { content: '🔐'; }
+        
+        .page-phishing .alert-badge { 
+            background: rgba(247, 66, 45, 0.15); 
+            color: #F7422D; 
+            border-color: rgba(247, 66, 45, 0.3);
+        }
+        .page-phishing .alert-badge::before { background: #F7422D; }
+        
+        .page-compromise .alert-badge { 
+            background: rgba(246, 184, 48, 0.15); 
+            color: #F6B830; 
+            border-color: rgba(246, 184, 48, 0.3);
+        }
+        .page-compromise .alert-badge::before { background: #F6B830; }
+        
+        .page-credentials .alert-badge { 
+            background: rgba(106, 126, 237, 0.15); 
+            color: #6A7EED; 
+            border-color: rgba(106, 126, 237, 0.3);
+        }
+        .page-credentials .alert-badge::before { background: #6A7EED; }
+    </style>
+</head>
+<body class="page-compromise">
+    <div class="bg-pattern"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    
+    <nav>
+        <div class="logo">
+            <div class="logo-icon"></div>
+            <span>LOOKOUT</span>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="alert-badge">Security Simulation</div>
+        
+        <h1>Luckily this is a test; your device could have just been compromised.</h1>
+        
+        <p class="subtitle">
+            In a real attack, this page would have been designed to steal your credentials or install malware. Lookout protects against these threats before they reach your device.
+        </p>
+        
+        <div class="visual-container">
+    		<div class="icon-large"></div>
+    		<h3 style="font-size: 24px; margin-bottom: 12px; color: #FFFFFF;">Attack Vector: Device Compromise</h3>
+    		<p style="color: #97A0A4; line-height: 1.6; margin-bottom: 16px;">
+        		Malicious apps, network attacks, and OS exploits can silently compromise mobile devices, granting attackers persistent access to corporate data. Lookout's on-device intelligence detects and remediates compromises before data is exfiltrated.
+    		</p>
+    		<div class="demo-text">
+        		> SIMULATION_ID: COMPROMISE_2026_DEMO<br>
+        		> THREAT_LEVEL: CRITICAL<br>
+        		> PROTECTION_STATUS: DEVICE_SECURED_BY_LOOKOUT
+    		</div>
+		</div>
+        
+        <div class="cta-container">
+            <a href="https://www.lookout.com" class="cta-button" target="_blank">
+                Learn More at Lookout.com
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                </svg>
+            </a>
+            <a href="#" class="cta-secondary" onclick="window.location.reload()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 12"/>
+                </svg>
+                Run Simulation Again
+            </a>
+        </div>
+    </div>
+    
+    <footer>
+        © 2026 Lookout, Inc. This is a controlled security demonstration. No data has been compromised.
+    </footer>
+    
+    <script>
+        // Add dynamic interaction
+        document.addEventListener('mousemove', (e) => {
+            const orbs = document.querySelectorAll('.orb');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            orbs.forEach((orb, index) => {
+                const speed = (index + 1) * 20;
+                const xOffset = (window.innerWidth / 2 - e.clientX) / speed;
+                const yOffset = (window.innerHeight / 2 - e.clientY) / speed;
+                orb.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+            });
+        });
+        
+        // Typing effect for demo text
+        const demoText = document.querySelector('.demo-text');
+        if(demoText) {
+            const originalHTML = demoText.innerHTML;
+            demoText.innerHTML = '';
+            let i = 0;
+            const text = originalHTML.replace(/<br>/g, '\n');
+            
+            function typeWriter() {
+                if (i < text.length) {
+                    const char = text.charAt(i);
+                    demoText.innerHTML += char === '\n' ? '<br>' : char;
+                    i++;
+                    setTimeout(typeWriter, 20);
+                } else {
+                    demoText.innerHTML = originalHTML;
+                }
+            }
+            
+            setTimeout(typeWriter, 500);
+        }
+    </script>
+</body>
+</html>
