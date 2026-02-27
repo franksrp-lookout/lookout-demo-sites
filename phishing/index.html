@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Security Alert - Lookout Demo</title>
+    <title>Security Alert - Phishing Demo</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
         
@@ -99,37 +99,11 @@
             backdrop-filter: blur(10px);
         }
         
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 700;
-            font-size: 24px;
-            letter-spacing: -0.5px;
+        .logo img {
+           	height: 40px;
+           	width: auto;
         }
-        
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #C8FF00 0%, #15E08C 100%);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .logo-icon::before {
-            content: '';
-            position: absolute;
-            width: 60%;
-            height: 60%;
-            background: #1E3239;
-            clip-path: polygon(0 0, 100% 50%, 0 100%, 0 0);
-            transform: translateX(-10%);
-        }
-        
+                
         /* Main Container */
         .container {
             max-width: 900px;
@@ -239,9 +213,8 @@
         }
         
         .icon-large::after {
-            content: '⚠';
+            content: '🎣';
             font-size: 36px;
-            color: #C8FF00;
         }
         
         .demo-text {
@@ -344,34 +317,9 @@
             }
         }
         
-        /* Page Specific Variations */
-        .page-phishing .icon-large::after { content: '🎣'; }
-        .page-compromise .icon-large::after { content: '📱'; }
-        .page-credentials .icon-large::after { content: '🔐'; }
-        
-        .page-phishing .alert-badge { 
-            background: rgba(247, 66, 45, 0.15); 
-            color: #F7422D; 
-            border-color: rgba(247, 66, 45, 0.3);
-        }
-        .page-phishing .alert-badge::before { background: #F7422D; }
-        
-        .page-compromise .alert-badge { 
-            background: rgba(246, 184, 48, 0.15); 
-            color: #F6B830; 
-            border-color: rgba(246, 184, 48, 0.3);
-        }
-        .page-compromise .alert-badge::before { background: #F6B830; }
-        
-        .page-credentials .alert-badge { 
-            background: rgba(106, 126, 237, 0.15); 
-            color: #6A7EED; 
-            border-color: rgba(106, 126, 237, 0.3);
-        }
-        .page-credentials .alert-badge::before { background: #6A7EED; }
     </style>
 </head>
-<body class="page-phishing">
+<body>
     <div class="bg-pattern"></div>
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
@@ -379,11 +327,10 @@
     
     <nav>
         <div class="logo">
-            <div class="logo-icon"></div>
-            <span>LOOKOUT</span>
+            <img src="https://cdn.prod.website-files.com/64ad8cecda5417d65d91a876/64ad8cecda5417d65d91aa34_lookout-logo-white-r.svg" alt="Lookout">
         </div>
     </nav>
-    
+        
     <div class="container">
         <div class="alert-badge">Security Simulation</div>
         
@@ -412,12 +359,6 @@
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M7 17L17 7M17 7H7M17 7V17"/>
                 </svg>
-            </a>
-            <a href="#" class="cta-secondary" onclick="window.location.reload()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 12"/>
-                </svg>
-                Run Simulation Again
             </a>
         </div>
     </div>
