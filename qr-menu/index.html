@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Alchemist Bar & Lounge - Digital Menu</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --alchemist-gold: #C9A961;
+            --alchemist-dark: #1a1a1a;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f0f0f;
+            color: #fff;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.7) 100%);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--alchemist-gold);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            color: var(--alchemist-gold);
+            margin-bottom: 4px;
+            letter-spacing: 2px;
+        }
+        
+        .header p {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        
+        .url-bar {
+            background: #1a1a1a;
+            padding: 12px 20px;
+            border-bottom: 1px solid #333;
+            font-family: monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        
+        .secure { color: #10a37f; }
+        .url-text { color: #888; }
+        .url-highlight { color: #fff; font-weight: 600; }
+        
+        .menu-container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 24px 20px 100px;
+        }
+        
+        .menu-section { margin-bottom: 40px; }
+        
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            color: var(--alchemist-gold);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .menu-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .menu-item:hover {
+            border-color: var(--alchemist-gold);
+            background: rgba(201, 169, 97, 0.05);
+        }
+        
+        .item-info h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        
+        .item-info p {
+            font-size: 13px;
+            color: #888;
+            line-height: 1.4;
+        }
+        
+        .item-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            color: var(--alchemist-gold);
+            font-weight: 700;
+        }
+        
+        .order-section {
+            background: linear-gradient(135deg, rgba(201, 169, 97, 0.1) 0%, rgba(201, 169, 97, 0.05) 100%);
+            border: 1px solid var(--alchemist-gold);
+            border-radius: 16px;
+            padding: 28px;
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        .order-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            color: var(--alchemist-gold);
+            margin-bottom: 8px;
+        }
+        
+        .order-btn {
+            background: var(--alchemist-gold);
+            color: #000;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 16px;
+        }
+        
+        .timer-notice {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: var(--alchemist-gold);
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 13px;
+            border: 1px solid var(--alchemist-gold);
+            z-index: 50;
+        }
+        
+        @media (max-width: 480px) {
+            .header h1 { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>THE ALCHEMIST</h1>
+        <p>Bar & Lounge • San Francisco</p>
+    </div>
+    
+    <div class="url-bar">
+        <span class="secure">🔒 https://</span>
+        <span class="url-highlight">menu.smarttab.com</span>
+        <span class="url-text">.alchemistsf.order.thebizworld.org</span>
+    </div>
+
+    <div class="menu-container">
+        <div class="menu-section">
+            <h2 class="section-title">🍸 Lookout Signature Cocktails</h2>
+            
+            <div class="menu-item" onclick="trackInteraction()">
+                <div class="item-info">
+                    <h3>Old Fashioned Firewall</h3>
+                    <p>Whiskey, Demerara, Bitters, Orange Oil — A classic with uncompromising protection</p>
+                </div>
+                <div class="item-price">$18</div>
+            </div>
+            
+            <div class="menu-item" onclick="trackInteraction()">
+                <div class="item-info">
+                    <h3>(A)I See Stars</h3>
+                    <p>Vodka, Marigold Liquor, Passion Fruit, Citrus, Lemon Verbena Seltzer</p>
+                </div>
+                <div class="item-price">$17</div>
+            </div>
+            
+            <div class="menu-item" onclick="trackInteraction()">
+                <div class="item-info">
+                    <h3>The Phish Blocker</h3>
+                    <p>Tequila, Reposado, Cachaça, Orgeat, Cilantro, Lime, Cucumber Bitters</p>
+                </div>
+                <div class="item-price">$16</div>
+            </div>
+            
+            <div class="menu-item" onclick="trackInteraction()">
+                <div class="item-info">
+                    <h3>Frostbite</h3>
+                    <p>Agave de Cortes Mezcal, Alpine Aperitif, Cooling Herbs Cordial, Branca Menta, Habanero, Saline</p>
+                </div>
+                <div class="item-price">$18</div>
+            </div>
+            
+            <div class="menu-item" onclick="trackInteraction()">
+                <div class="item-info">
+                    <h3>Peach Boy</h3>
+                    <p>Sake, Grilled Peach, Ponzu, Shiso, Bitters, Citrus</p>
+                </div>
+                <div class="item-price">$16</div>
+            </div>
+            
+            <div class="menu-item" onclick="trackInteraction()">
+                <div class="item-info">
+                    <h3>The Tamale</h3>
+                    <p>Abasolo Corn Whiskey, Nixta Elote Liqueur, Ancho Verde, Popcorn syrup, Maleza Citricos bitters, Lemon</p>
+                </div>
+                <div class="item-price">$17</div>
+            </div>
+            
+            <div class="menu-item" onclick="trackInteraction()">
+                <div class="item-info">
+                    <h3>Downtown Defense</h3>
+                    <p>Bourbon, Sweet Vermouth, Bitters — Always-on protection</p>
+                </div>
+                <div class="item-price">$18</div>
+            </div>
+            
+            <div class="menu-item" onclick="trackInteraction()">
+                <div class="item-info">
+                    <h3>Clean Signal</h3>
+                    <p>Ritual Zero Proof Rum, Coconut, Orange Sherbert, Citrus — Zero-alcohol, zero-threats</p>
+                </div>
+                <div class="item-price">$14</div>
+            </div>
+        </div>
+        
+        <div class="menu-section">
+            <h2 class="section-title">🍷 Wine</h2>
+            <div class="menu-item" onclick="trackInteraction()">
+                <div class="item-info"><h3>Pinot Noir</h3><p>Silky, medium-bodied with notes of cherry and earth</p></div>
+                <div class="item-price">$14</div>
+            </div>
+            <div class="menu-item" onclick="trackInteraction()">
+                <div class="item-info"><h3>Cabernet Sauvignon</h3><p>Bold, full-bodied with dark fruit and oak</p></div>
+                <div class="item-price">$16</div>
+            </div>
+            <div class="menu-item" onclick="trackInteraction()">
+                <div class="item-info"><h3>Chardonnay</h3><p>Crisp, with notes of apple and vanilla</p></div>
+                <div class="item-price">$13</div>
+            </div>
+            <div class="menu-item" onclick="trackInteraction()">
+                <div class="item-info"><h3>Sauvignon Blanc</h3><p>Refreshing citrus and herbal notes</p></div>
+                <div class="item-price">$13</div>
+            </div>
+            <div class="menu-item" onclick="trackInteraction()">
+                <div class="item-info"><h3>House Sparkling Wine</h3><p>Prosecco, bright and effervescent</p></div>
+                <div class="item-price">$12</div>
+            </div>
+        </div>
+        
+        <div class="menu-section">
+            <h2 class="section-title">🍺 Beer</h2>
+            <div class="menu-item" onclick="trackInteraction()">
+                <div class="item-info"><h3>Allagash White Ale</h3><p>Belgian-style wheat beer, crisp and refreshing</p></div>
+                <div class="item-price">$9</div>
+            </div>
+            <div class="menu-item" onclick="trackInteraction()">
+                <div class="item-info"><h3>Hazy IPA</h3><p>Juicy, tropical hops with a smooth finish</p></div>
+                <div class="item-price">$10</div>
+            </div>
+            <div class="menu-item" onclick="trackInteraction()">
+                <div class="item-info"><h3>Old Rasputin Imperial Stout</h3><p>Russian imperial stout, rich and complex</p></div>
+                <div class="item-price">$11</div>
+            </div>
+            <div class="menu-item" onclick="trackInteraction()">
+                <div class="item-info"><h3>Off Dry Cider</h3><p>Crisp apple cider, slightly sweet</p></div>
+                <div class="item-price">$9</div>
+            </div>
+            <div class="menu-item" onclick="trackInteraction()">
+                <div class="item-info"><h3>Montucky Cold Snacks Lager</h3><p>Light, refreshing American lager</p></div>
+                <div class="item-price">$8</div>
+            </div>
+            <div class="menu-item" onclick="trackInteraction()">
+                <div class="item-info"><h3>Pacífico</h3><p>Mexican pilsner-style lager</p></div>
+                <div class="item-price">$8</div>
+            </div>
+            <div class="menu-item" onclick="trackInteraction()">
+                <div class="item-info"><h3>StS Pilsner</h3><p>Czech-style pilsner, crisp and hoppy</p></div>
+                <div class="item-price">$9</div>
+            </div>
+            <div class="menu-item" onclick="trackInteraction()">
+                <div class="item-info"><h3>Coors Light</h3><p>Light lager, cold filtered</p></div>
+                <div class="item-price">$7</div>
+            </div>
+            <div class="menu-item" onclick="trackInteraction()">
+                <div class="item-info"><h3>Non-Alcoholic Lager</h3><p>Full flavor, zero alcohol</p></div>
+                <div class="item-price">$6</div>
+            </div>
+            <div class="menu-item" onclick="trackInteraction()">
+                <div class="item-info"><h3>Non-Alcoholic IPA</h3><p>Hoppy and refreshing, no alcohol</p></div>
+                <div class="item-price">$6</div>
+            </div>
+        </div>
+        
+        <div class="order-section">
+            <h2>Open a Secure Tab</h2>
+            <p>Order from your table. Encrypted payment processing.</p>
+            <button class="order-btn" onclick="startOrder()">Start Secure Tab</button>
+        </div>
+    </div>
+
+    <div class="timer-notice" id="timerNotice">
+        Redirecting in <span id="timerCount">30</span>s
+    </div>
+
+    <script>
+        let timeLeft = 30;
+        let interactionCount = 0;
+        
+        // Auto-redirect after 30 seconds
+        const timer = setInterval(() => {
+            timeLeft--;
+            document.getElementById('timerCount').textContent = timeLeft;
+            
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                window.location.href = 'https://reveal.thebizworld.org'; // Change to your reveal URL
+            }
+        }, 1000);
+        
+        function trackInteraction() {
+            interactionCount++;
+            if (interactionCount >= 2) {
+                clearInterval(timer);
+                window.location.href = 'https://reveal.thebizworld.org';
+            }
+        }
+        
+        function startOrder() {
+            clearInterval(timer);
+            window.location.href = 'https://reveal.thebizworld.org';
+        }
+    </script>
+</body>
+</html>

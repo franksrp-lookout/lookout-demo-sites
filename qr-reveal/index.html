@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Alert - QR Phishing Demo</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #1E3239;
+            color: #FFFFFF;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        .bg-pattern {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0.03;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(200, 255, 0, 0.1) 35px, rgba(200, 255, 0, 0.1) 70px),
+                repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(200, 255, 0, 0.05) 35px, rgba(200, 255, 0, 0.05) 70px);
+            animation: patternMove 20s linear infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes patternMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 20s infinite ease-in-out;
+            pointer-events: none;
+        }
+        
+        .orb-1 { width: 400px; height: 400px; background: radial-gradient(circle, #C8FF00 0%, transparent 70%); top: -10%; right: -10%; }
+        .orb-2 { width: 300px; height: 300px; background: radial-gradient(circle, #F6B830 0%, transparent 70%); bottom: -10%; left: -10%; animation-delay: -5s; }
+        .orb-3 { width: 200px; height: 200px; background: radial-gradient(circle, #F7422D 0%, transparent 70%); top: 50%; left: 30%; animation-delay: -10s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+        
+        nav {
+            position: fixed;
+            top: 0; width: 100%; padding: 24px 48px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(30, 50, 57, 0.9) 0%, transparent 100%);
+            backdrop-filter: blur(10px);
+        }
+        
+        .logo img { height: 40px; width: auto; }
+        
+        .container { max-width: 900px; margin: 0 auto; padding: 140px 24px 80px; position: relative; z-index: 10; }
+        
+        .alert-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(246, 184, 48, 0.15);
+            border: 1px solid rgba(246, 184, 48, 0.3);
+            color: #F6B830;
+            padding: 8px 16px; border-radius: 50px;
+            font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+            margin-bottom: 32px; animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        
+        .alert-badge::before {
+            content: ''; width: 8px; height: 8px;
+            background: #F6B830; border-radius: 50%;
+            animation: blink 1.5s infinite;
+        }
+        
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        
+        h1 {
+            font-size: clamp(36px, 6vw, 64px); font-weight: 800; line-height: 1.1;
+            margin-bottom: 24px; letter-spacing: -2px;
+            background: linear-gradient(135deg, #FFFFFF 0%, #B8F3D4 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        
+        .subtitle { font-size: 20px; color: #97A0A4; line-height: 1.6; margin-bottom: 48px; max-width: 600px; }
+        
+        .venue-card {
+            background: rgba(201, 169, 97, 0.1);
+            border: 1px solid rgba(201, 169, 97, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .venue-icon {
+            width: 60px; height: 60px;
+            background: rgba(201, 169, 97, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+        
+        .venue-info h3 { color: #C9A961; font-size: 18px; margin-bottom: 4px; }
+        .venue-info p { color: #888; font-size: 14px; }
+        
+        .visual-container {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px; padding: 48px; margin-bottom: 48px;
+            position: relative; overflow: hidden; backdrop-filter: blur(10px);
+        }
+        
+        .visual-container::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, #C8FF00, transparent);
+            animation: scan 3s linear infinite;
+        }
+        
+        @keyframes scan { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+        
+        .icon-large {
+            width: 80px; height: 80px;
+            background: linear-gradient(135deg, rgba(246, 184, 48, 0.2) 0%, rgba(247, 66, 45, 0.2) 100%);
+            border-radius: 20px; display: flex; align-items: center; justify-content: center;
+            margin-bottom: 24px; border: 1px solid rgba(246, 184, 48, 0.3); position: relative;
+        }
+        
+        .icon-large::after { content: '🍸'; font-size: 36px; }
+        
+        .url-breakdown {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        
+        .url-part { display: inline; }
+        .url-part.fake { color: #F7422D; text-decoration: line-through; opacity: 0.6; }
+        .url-part.real { color: #C8FF00; font-weight: 700; text-decoration: underline; }
+        
+        .demo-text {
+            font-family: 'Courier New', monospace;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 3px solid #F6B830;
+            color: #F6B830;
+            font-size: 14px;
+            margin-top: 16px;
+            line-height: 1.6;
+        }
+        
+        .cta-container { display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
+        
+        .cta-button {
+            display: inline-flex; align-items: center; gap: 12px;
+            background: #C8FF00; color: #1E3239;
+            padding: 18px 36px; border-radius: 50px;
+            font-weight: 700; font-size: 16px; text-decoration: none;
+            transition: all 0.3s ease; border: 2px solid #C8FF00;
+            box-shadow: 0 4px 20px rgba(200, 255, 0, 0.3);
+            position: relative; overflow: hidden;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(200, 255, 0, 0.4);
+        }
+        
+        .cta-secondary { color: #97A0A4; font-size: 14px; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.3s; }
+        .cta-secondary:hover { color: #FFFFFF; }
+        
+        footer {
+            position: fixed; bottom: 0; width: 100%; padding: 24px;
+            text-align: center; color: #707D80; font-size: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(30, 50, 57, 0.8); backdrop-filter: blur(10px);
+        }
+        
+        @media (max-width: 768px) {
+            nav { padding: 16px 24px; }
+            .container { padding: 120px 20px 100px; }
+            .visual-container { padding: 32px 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    
+    <nav>
+        <div class="logo">
+            <img src="https://cdn.prod.website-files.com/64ad8cecda5417d65d91a876/64ad8cecda5417d65d91aa34_lookout-logo-white-r.svg" alt="Lookout">
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="alert-badge">QR Phishing Simulation</div>
+        
+        <h1>Luckily this is a test; that cocktail menu was a trap.</h1>
+        
+        <p class="subtitle">
+            You scanned a QR code at The Alchemist expecting to order an 
+            <strong>Old Fashioned Firewall</strong> or <strong>The Phish Blocker</strong>, 
+            but you landed on a malicious subdomain designed to harvest credentials.
+        </p>
+        
+        <div class="venue-card">
+            <div class="venue-icon">🍸</div>
+            <div class="venue-info">
+                <h3>The Alchemist Bar & Lounge</h3>
+                <p>Real venue • Fake menu • QR code replaced</p>
+            </div>
+        </div>
+        
+        <div class="visual-container">
+            <div class="icon-large"></div>
+            <h3 style="font-size: 24px; margin-bottom: 12px; color: #FFFFFF;">Attack Vector: QR Code Replacement</h3>
+            <p style="color: #97A0A4; line-height: 1.6; margin-bottom: 16px;">
+                Attackers place fake QR code stickers over legitimate ones at bars, restaurants, and cafes. 
+                The URL looks like the real menu site, but it's a subdomain of an attacker-controlled domain.
+            </p>
+            
+            <div class="url-breakdown">
+                <div style="color: #666; font-size: 11px; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px;">Deceptive URL Structure:</div>
+                <div>
+                    <span class="url-part fake">menu.smarttab.com.</span><span class="url-part fake">alchemistsf.</span><span class="url-part fake">order.</span><span class="url-part real">thebizworld.org</span>
+                </div>
+                <div style="color: #666; font-size: 11px; margin-top: 12px; font-style: italic;">
+                    ↑ Your browser sees "thebizworld.org" as the real domain
+                </div>
+            </div>
+            
+            <div class="demo-text">
+                > SIMULATION_ID: QR_VENUE_2026_DEMO<br>
+                > LOCATION: The Alchemist Bar & Lounge, SF<br>
+                > THREAT_LEVEL: HIGH<br>
+                > ATTACK_VECTOR: QR_REPLACEMENT/SUBDOMAIN_SPOOFING<br>
+                > PAYLOAD: FAKE_MENU_CREDENTIAL_HARVEST<br>
+                > TARGET_ACTION: START_TAB_BUTTON_CLICK<br>
+                > DATA_CAPTURED: NONE (DEMO ONLY)<br>
+                > PROTECTION_STATUS: BLOCKED_BY_LOOKOUT
+            </div>
+        </div>
+        
+        <div class="cta-container">
+            <a href="https://www.lookout.com" class="cta-button" target="_blank">
+                Learn More at Lookout.com
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+    
+    <footer>
+        © 2026 Lookout, Inc. This is a controlled security demonstration. No affiliation with The Alchemist Bar & Lounge. No data has been compromised.
+    </footer>
+    
+    <script>
+        document.addEventListener('mousemove', (e) => {
+            const orbs = document.querySelectorAll('.orb');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            orbs.forEach((orb, index) => {
+                const speed = (index + 1) * 20;
+                const xOffset = (window.innerWidth / 2 - e.clientX) / speed;
+                const yOffset = (window.innerHeight / 2 - e.clientY) / speed;
+                orb.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+            });
+        });
+        
+        const demoText = document.querySelector('.demo-text');
+        if(demoText) {
+            const originalHTML = demoText.innerHTML;
+            demoText.innerHTML = '';
+            let i = 0;
+            const text = originalHTML.replace(/<br>/g, '\n');
+            
+            function typeWriter() {
+                if (i < text.length) {
+                    const char = text.charAt(i);
+                    demoText.innerHTML += char === '\n' ? '<br>' : char;
+                    i++;
+                    setTimeout(typeWriter, 20);
+                } else {
+                    demoText.innerHTML = originalHTML;
+                }
+            }
+            
+            setTimeout(typeWriter, 500);
+        }
+    </script>
+</body>
+</html>
